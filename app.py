@@ -68,7 +68,26 @@ def load_whisper():
 
 # ---------- GEMINI RETRY ----------
 def generate_with_retry(client, prompt, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return client.models.generate_content(
+                model="gemini-3.8-flash",
+                contents=prompt
+            )
 
+        except Exception as e:
+            print(f"Gemini Error (Attempt {attempt + 1}): {e}")
+
+            if attempt < max_retries - 1:
+                st.warning(
+                    f"⏳ Gemini request failed. "
+                    f"Retrying... ({attempt + 1}/{max_retries})"
+                )
+                time.sleep(2)
+
+            else:
+                st.error(f"❌ Gemini API Error: {e}")
+                return None
     for attempt in range(max_retries):
 
         try:
