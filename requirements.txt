@@ -1,0 +1,5 @@
+streamlit
+faster-whisper
+google-genai
+rouge-score
+av<19
